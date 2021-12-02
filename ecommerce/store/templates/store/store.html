@@ -1,5 +1,42 @@
+{% extends 'store/main.html' %}
 {% load static %} <!-- static css load 그리고 나서 밑에 다이나믹하게 로드 -->
 
+{% block content %}
+    <div class="row">
+        <div class="col-lg-4">
+            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
+            <div class="box-element product">
+                <h6><strong>Product</strong></h6>
+                <hr>
+                <!-- btn btn-outline-secondary 는 부트스트랩 class,, add-btn은 내가 지은 클래스 이름-->
+                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+                <!-- view란 버튼 bt-outline-success 클릭스 초록색으로 변함-->
+                <a class="btn btn-outline-success" href="#">View</a>
+                <!-- inline-block 위 버튼들과 정렬시켜줌 float 은위치-->
+                <h4 style="display: inline-block; float:right">$20</h4>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
+            <div class="box-element product">
+                <h6><strong>Product</strong></h6>
+                <hr>
+                <button class="btn btn-outline-secondary add-ㅜbtn">Add to Cart</button>
+                <a class="btn btn-outline-success" href="#">View</a>
+                <h4 style="display: inline-block; float:right">$20</h4>
+            </div>
+        </div>
 
+        <div class="col-lg-4">
+            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
 
-<h3>store</h3>
+            <div class="box-element product">
+                <h6><strong>Product</strong></h6>
+                <hr>
+                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
+                <a class="btn btn-outline-success" href="#">View</a>
+                <h4 style="display: inline-block; float:right">$20</h4>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
