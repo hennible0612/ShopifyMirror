@@ -123,6 +123,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS =[
     os.path.join(BASE_DIR,'static')
 ]
+
+MEDIA_URL = '/images/' #고객이 이미지 클릭시 이미지전용 url을 위해 필요
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'static/images') #media 관련된거 는 static/images에 있따는 것을 알려줌
+
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

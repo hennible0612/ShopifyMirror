@@ -15,8 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from django.conf.urls.static import static #MEDIA_URL을 위힌 static 함수 import
+from django.conf import settings #setting 에 정의한 MEDIA_URL을 가져옴
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('store.urls'))
+
 ]
+
+#MEDIA_URL을 MEDIA_ROOT로 설정해준다
+#exampe     /images/Headphones.jpg
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

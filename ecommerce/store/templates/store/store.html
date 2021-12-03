@@ -3,40 +3,60 @@
 
 {% block content %}
     <div class="row">
+        {% for product in products %}
         <div class="col-lg-4">
-            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
+            <img class="thumbnail" src="{{ product.imageURL }}">
             <div class="box-element product">
-                <h6><strong>Product</strong></h6>
+                <h6><strong>{{ product.name }}</strong></h6>
                 <hr>
                 <!-- btn btn-outline-secondary 는 부트스트랩 class,, add-btn은 내가 지은 클래스 이름-->
                 <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
                 <!-- view란 버튼 bt-outline-success 클릭스 초록색으로 변함-->
                 <a class="btn btn-outline-success" href="#">View</a>
                 <!-- inline-block 위 버튼들과 정렬시켜줌 float 은위치-->
-                <h4 style="display: inline-block; float:right">$20</h4>
+                <h4 style="display: inline-block; float:right"><strong>
+                    ${{ product.price|floatformat:2 }} <!-- floatformat 소수점 2개 표현 -->
+                </strong></h4>
             </div>
         </div>
-        <div class="col-lg-4">
-            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
-            <div class="box-element product">
-                <h6><strong>Product</strong></h6>
-                <hr>
-                <button class="btn btn-outline-secondary add-ㅜbtn">Add to Cart</button>
-                <a class="btn btn-outline-success" href="#">View</a>
-                <h4 style="display: inline-block; float:right">$20</h4>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">
-
-            <div class="box-element product">
-                <h6><strong>Product</strong></h6>
-                <hr>
-                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>
-                <a class="btn btn-outline-success" href="#">View</a>
-                <h4 style="display: inline-block; float:right">$20</h4>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 {% endblock content %}
+
+{#    <div class="row">#}
+{#        <div class="col-lg-4">#}
+{#            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">#}
+{#            <div class="box-element product">#}
+{#                <h6><strong>Product</strong></h6>#}
+{#                <hr>#}
+{#                <!-- btn btn-outline-secondary 는 부트스트랩 class,, add-btn은 내가 지은 클래스 이름-->#}
+{#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
+{#                <!-- view란 버튼 bt-outline-success 클릭스 초록색으로 변함-->#}
+{#                <a class="btn btn-outline-success" href="#">View</a>#}
+{#                <!-- inline-block 위 버튼들과 정렬시켜줌 float 은위치-->#}
+{#                <h4 style="display: inline-block; float:right">$20</h4>#}
+{#            </div>#}
+{#        </div>#}
+{#        <div class="col-lg-4">#}
+{#            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">#}
+{#            <div class="box-element product">#}
+{#                <h6><strong>Product</strong></h6>#}
+{#                <hr>#}
+{#                <button class="btn btn-outline-secondary add-ㅜbtn">Add to Cart</button>#}
+{#                <a class="btn btn-outline-success" href="#">View</a>#}
+{#                <h4 style="display: inline-block; float:right">$20</h4>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <div class="col-lg-4">#}
+{#            <img class="thumbnail" src="{% static 'images/placeholder.png' %}">#}
+{##}
+{#            <div class="box-element product">#}
+{#                <h6><strong>Product</strong></h6>#}
+{#                <hr>#}
+{#                <button class="btn btn-outline-secondary add-btn">Add to Cart</button>#}
+{#                <a class="btn btn-outline-success" href="#">View</a>#}
+{#                <h4 style="display: inline-block; float:right">$20</h4>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
