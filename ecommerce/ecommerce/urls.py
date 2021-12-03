@@ -25,4 +25,5 @@ urlpatterns = [
 
 #MEDIA_URL을 MEDIA_ROOT로 설정해준다
 #exampe     /images/Headphones.jpg
+
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

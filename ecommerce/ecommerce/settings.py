@@ -124,9 +124,9 @@ STATICFILES_DIRS =[
     os.path.join(BASE_DIR,'static')
 ]
 
-MEDIA_URL = '/images/' #고객이 이미지 클릭시 이미지전용 url을 위해 필요
+MEDIA_URL = '/images/' #이미지들이 랜더링할때 필요한 이미지들 위치
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'static/images') #media 관련된거 는 static/images에 있따는 것을 알려줌
+MEDIA_ROOT = os.path.join(BASE_DIR,'static/images') #media 관련된거 업로드시 위치는 static/images에 저장시켜라
 
 
 
