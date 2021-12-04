@@ -10,6 +10,7 @@
                 <h6><strong>{{ product.name }}</strong></h6>
                 <hr>
                 <!-- btn btn-outline-secondary 는 부트스트랩 class,, add-btn은 내가 지은 클래스 이름-->
+                <!--data-product, data-action을 사용해서 cart.js에게 필요한데이터를 넘겨줌-->
                 <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
                 <!-- view란 버튼 bt-outline-success 클릭스 초록색으로 변함-->
                 <a class="btn btn-outline-success" href="#">View</a>
