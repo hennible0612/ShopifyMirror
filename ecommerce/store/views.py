@@ -38,4 +38,4 @@ def checkout(request):
 
 
 def updateItem(request):#아이템 추가할때마다 제이슨 리스폰스 보냄
-    return JsonResponse('Item was added', safe=False)
+    return JsonResponse('Item was added!', safe=False)

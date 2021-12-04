@@ -21,21 +21,21 @@ for (i = 0; i < updateBtns.length; i++) {//for문을 돌리는 이유는 모든 
 
 function updateUserOrder(productId, action) {
 	console.log("user is logged in, sending data")
-	var url ='/update_item' //데이터 보낼 위치 즉, 해당 url은 updateItem을 부르고 있으므로 updateItem에게 전달
+	var url ='/update_item/' //데이터 보낼 위치 즉, 해당 url은 updateItem을 부르고 있으므로 updateItem에게 전달
 
 	fetch(url,{ //fetch는 promise based이다. 즉, then과 catch를 사용할 수 있다.
 		method: 'POST',
 		headers:{ //json을 주기 위해서 fectch에게 headers를 사용해서 json을 준다는거 말해줘야한다.
-			'Content-Type': 'applictaion/json'
+			'Content-Type': 'applictaion/json',
+			'X-CSRFToken': csrftoken,
 		},
-		body:JSON.stringify({
-			'productId':productId, 'action':action
-		})
+		body:JSON.stringify({'productId':productId, 'action':action})
 	})
 	.then((response)=>{ //promise란 말그대로 약속, resolve혹은 reject를 받고난후 then실행
 		return response.json() //view에 있는 updateItem으로 부터 JsonResponse를 받음
 	})
 	.then((data)=>{
+		// location.reload()
 		console.log('data:',data)
 	})
 }
