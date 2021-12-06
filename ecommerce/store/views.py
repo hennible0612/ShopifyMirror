@@ -82,3 +82,7 @@ def updateItem(request):#아이템 추가할때마다 제이슨 리스폰스 보
         orderItem.delete()
 
     return JsonResponse('Item was added!', safe=False)
+
+def processOrder(request):
+    print('Data:', request.body)
+    return JsonResponse('Payment complete!', safe=False)
