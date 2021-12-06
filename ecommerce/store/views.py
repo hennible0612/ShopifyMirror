@@ -9,8 +9,19 @@ import json
 모든 제품 표시
 """
 def store(request):
+    if request.user.is_authenticated:
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer,
+                                                     complete=False)  # 현재 가져온 customer의 order가 없으면 만들고 있으면 가져오기,
+        items = order.orderitem_set.all()  # order에 있는 모든 items 가져오기
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0}
+        cartItems = order['get_cart_items']
+
     products = Product.objects.all()
-    context ={'products':products}
+    context ={'products':products,'cartItems':cartItems}
     return render(request,'store/store.html',context)
 
 
@@ -19,11 +30,14 @@ def cart(request):
         customer = request.user.customer
         order, created=Order.objects.get_or_create(customer=customer, complete=False) #현재 가져온 customer의 order가 없으면 만들고 있으면 가져오기,
         items = order.orderitem_set.all() #OrderItem은 Order의 자식이기 현재Order의 OrderItem을 소문자로 orderitem_set.all()로 가져올수 있음
+        cartItems = order.get_cart_items
+
     else:
         items=[]
         order = {'get_cart_total':0, 'get_cart_items':0}
+        cartItems = order['get_cart_items']
 
-    context ={'items':items, 'order':order}
+    context ={'items':items, 'order':order,'cartItems':cartItems}
     return render(request,'store/cart.html',context)
 
 def checkout(request):
@@ -32,10 +46,14 @@ def checkout(request):
         order, created = Order.objects.get_or_create(customer=customer,
                                                      complete=False)  # 현재 가져온 customer의 order가 없으면 만들고 있으면 가져오기,
         items = order.orderitem_set.all()  # order에 있는 모든 items 가져오기
+        cartItems = order.get_cart_items
+
     else:
         items = []
         order = {'get_cart_total': 0, 'get_cart_items': 0}
-    context = {'items': items, 'order': order}
+        cartItems = order['get_cart_items']
+
+    context = {'items': items, 'order': order,'cartItems':cartItems}
     return render(request,'store/checkout.html',context)
 
 
@@ -50,7 +68,7 @@ def updateItem(request):#아이템 추가할때마다 제이슨 리스폰스 보
     product = Product.objects.get(id=productId) #ID사용해서 현재 클릭한 product 저장
     order, created = Order.objects.get_or_create(customer=customer, #현재 customer의 order를 get or create
                                                  complete=False)  # 현재 가져온 customer의 order가 없으면 만들고 있으면 가져오기,
-    orderItem, created = OrderItem.objects.get_or_create(order=order, #주문 아이템들
+    orderItem, created = OrderItem.objects.get_or_create(order=order, #주문 아이템템
                                                          product=product)
 
     if action == 'add':

@@ -35,8 +35,9 @@ function updateUserOrder(productId, action) {
 		return response.json() //view에 있는 updateItem으로 부터 JsonResponse를 받음
 	})
 	.then((data)=>{
-		// location.reload()
+		location.reload()
 		console.log('data:',data)
+		// location.reload()
 	})
 }
 
