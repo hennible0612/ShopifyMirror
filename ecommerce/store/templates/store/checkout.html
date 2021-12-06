@@ -6,6 +6,7 @@
 			<div class="box-element" id="form-wrapper">
 				<form id="form">
                     <!-- 이름 이메일 -->
+{#                    {% csrf_token %}#}
 					<div id="user-info">
 						<div class="form-field">
 							<input required class="form-control" type="text" name="name" placeholder="Name..">
@@ -65,13 +66,13 @@
                     </div>
                 {% endfor %}
 				<h5>Items:{{order.get_cart_items }}</h5>
-				<h5>Total:${{ order.get_cart_total }}</h5>
+				<h5>Total:${{ order.get_cart_total | floatformat:2}}</h5>
 			</div>
 		</div>
 	</div>
     <script type="text/javascript">
         var shipping = '{{ order.shipping }}'
-        var total = '{{ order.get_cart_total | floatformat:2 }}'
+        var total = '{{ order.get_cart_total }}'
 
         //실물 배송 없을 경우 주소 창 hide
         if (shipping == 'False') { //실물 배송이 없을경우 주소 x
@@ -90,6 +91,8 @@
 
         //결제 버튼 클릭시 hide
         var form = document.getElementById('form')
+        {#csrftoken = form.getElementsByTagName("input")[0].value#}
+
        form.addEventListener('submit', function (e) { //결제 버튼 클릭시
             e.preventDefault()
             console.log('Form submitted....')
