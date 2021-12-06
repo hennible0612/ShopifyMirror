@@ -46,6 +46,7 @@
             <br>
 			<div class="box-element hidden" id="payment-info">
 				<small>Paypal Options</small>
+                <button id="make-payment">Make Payment</button>
 			</div>
 		</div>
 
@@ -68,4 +69,17 @@
 			</div>
 		</div>
 	</div>
+    <script type="text/javascript">
+        var shipping = '{{ order.shipping }}'
+        if (shipping == 'False') { //실물 배송이 없을경우 주소 x
+            document.getElementById('shipping-info').innerHTML =''
+        }
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault()
+            document.getElementById('form-button').classList.add('hidden'); //Continue 버튼 hidden
+            document.getElementById('payment-info').classList.remove('hidden'); //
+
+        });
+    </script>
 {% endblock content %}

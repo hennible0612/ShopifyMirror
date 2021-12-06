@@ -21,6 +21,16 @@ class Order(models.Model): #Customer의 자식 주문의 상태, 누구의 주�
         return str(self.id)
 
     @property
+    def shipping(self):
+        shipping = False
+        orderitems = self.orderitem_set.all()
+        for i in orderitems:
+            if i.product.digital == False:#모든 product는 default로 digital == False이다.
+                shipping = True
+                shipping = True
+        return shipping
+
+    @property
     def get_cart_total(self):
         orderitems = self.orderitem_set.all()
         total = sum([item.get_total for item in orderitems])
