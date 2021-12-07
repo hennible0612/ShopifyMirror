@@ -4,7 +4,7 @@ from .models import *
 from django.http import JsonResponse
 import json
 import datetime
-
+from .utils import cookieCart
 """
 메인 페이지
 모든 제품 표시
@@ -19,9 +19,10 @@ def store(request):
         items = order.orderitem_set.all()  # order에 있는 모든 items 가져오기
         cartItems = order.get_cart_items
     else:
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
-        cartItems = order['get_cart_items']
+        cookieData = cookieCart(request)  # 쿠키가져옴
+        cartItems = cookieData['cartItems']
+        order = cookieData['order']
+        items = cookieData['items']
 
     products = Product.objects.all()
     context = {'products': products, 'cartItems': cartItems}
@@ -37,40 +38,10 @@ def cart(request):
         cartItems = order.get_cart_items
 
     else:
-        try:
-            cart = json.loads(request.COOKIES['cart'])  # 스트링으로 된거 풀고 cart에저장
-        except:
-            cart = {}
-        print('Cart:',cart)
-        items = []
-        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
-        cartItems = order['get_cart_items']
-        for i in cart:        # 카트에 들어있는 quantity확인인
-            try:
-                cartItems += cart[i]['quantity']
-
-                product = Product.objects.get(id=i) #아이디 기준으로 product에 저장
-                total = (product.price * cart[i]["quantity"]) #total 비용계산
-
-                order['get_cart_total'] += total
-                order['get_cart_items'] += cart[i]["quantity"]
-
-                item = {
-                    'product':{
-                        'id':product.id,
-                        'name':product.name,
-                        'price':product.price,
-                        'imageURL':product.imageURL,
-                    },
-                    'quantity':cart[i]["quantity"],
-                    'get_total':total
-                }
-                items.append(item)
-
-                if product.digital == False:
-                    order['shipping'] = True
-            except:
-                pass
+        cookieData = cookieCart(request) #쿠키가져옴
+        cartItems = cookieData['cartItems']
+        order = cookieData['order']
+        items = cookieData['items']
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/cart.html', context)
@@ -84,9 +55,10 @@ def checkout(request):
         cartItems = order.get_cart_items
 
     else:
-        items= []
-        order = {'get_cart_total': 0, 'get_cart_items': 0, 'shipping': False}
-        cartItems = order['get_cart_items']
+        cookieData = cookieCart(request)  # 쿠키가져옴
+        cartItems = cookieData['cartItems']
+        order = cookieData['order']
+        items = cookieData['items']
 
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
