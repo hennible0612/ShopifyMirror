@@ -10,13 +10,37 @@ for (i = 0; i < updateBtns.length; i++) {//for문을 돌리는 이유는 모든 
 
 		console.log("User:", user)
 		if (user == 'AnonymousUser') {
-			console.log("not logged in");
+			addCookieItem(productId, action)
 		} else { //로그인이 되어있다면 제품ID, 수행할 action 전달
 			updateUserOrder(productId,action)
 
 		}
 
 	})
+}
+
+function addCookieItem(productId, action) {
+	console.log('Not logged in...')
+
+	if (action == 'add') {
+		if (cart[productId] == undefined) {
+			cart[productId] = {'quantity': 1}
+		}else{
+			cart[productId]['quantity'] += 1
+		}
+	}
+	if(action == 'remove'){
+		cart[productId]['quantity'] -= 1
+
+		if (cart[productId]['quantity'] <= 0) {
+			console.log('Remove Item')
+			delete cart[productId]
+		}
+	}
+	console.log('Cart:', cart);
+	document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+	location.reload()
+
 }
 
 function updateUserOrder(productId, action) {
