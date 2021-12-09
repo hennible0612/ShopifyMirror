@@ -4,7 +4,8 @@ from .models import *
 from django.http import JsonResponse
 import json
 import datetime
-from .utils import cookieCart
+from .utils import cookieCart, cartData
+
 """
 메인 페이지
 모든 제품 표시
@@ -12,17 +13,8 @@ from .utils import cookieCart
 
 
 def store(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer,
-                                                     complete=False)  # 현재 가져온 customer의 order가 없으면 만들고 있으면 가져오기,
-        items = order.orderitem_set.all()  # order에 있는 모든 items 가져오기
-        cartItems = order.get_cart_items
-    else:
-        cookieData = cookieCart(request)  # 쿠키가져옴
-        cartItems = cookieData['cartItems']
-        order = cookieData['order']
-        items = cookieData['items']
+    data = cartData(request)
+    cartItems = data['cartItems']
 
     products = Product.objects.all()
     context = {'products': products, 'cartItems': cartItems}
@@ -30,35 +22,20 @@ def store(request):
 
 
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer,
-                                                     complete=False)  # 현재 가져온 customer의 order가 없으면 만들고 있으면 가져오기,
-        items = order.orderitem_set.all()  # OrderItem은 Order의 자식이기 현재Order의 OrderItem을 소문자로 orderitem_set.all()로 가져올수 있음
-        cartItems = order.get_cart_items
-
-    else:
-        cookieData = cookieCart(request) #쿠키가져옴
-        cartItems = cookieData['cartItems']
-        order = cookieData['order']
-        items = cookieData['items']
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
     return render(request, 'store/cart.html', context)
 
 
 def checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)  # 현재 가져온 customer의 order가 없으면 만들고 있으면 가져오기,
-        items = order.orderitem_set.all()  # order에 있는 모든 items 가져오기
-        cartItems = order.get_cart_items
-
-    else:
-        cookieData = cookieCart(request)  # 쿠키가져옴
-        cartItems = cookieData['cartItems']
-        order = cookieData['order']
-        items = cookieData['items']
+    data = cartData(request)
+    cartItems = data['cartItems']
+    order = data['order']
+    items = data['items']
 
 
     context = {'items': items, 'order': order, 'cartItems': cartItems}
@@ -100,12 +77,7 @@ def processOrder(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['form']['total'])  # JSON은 dict
-        order.transaction_id = transaction_id
 
-        if total == order.get_cart_total:  # 변조를 피하기 위함
-            order.complete = True
-        order.save()
 
         if order.shipping == True:
             ShippingAddress.objects.create(
@@ -119,6 +91,38 @@ def processOrder(request):
             )
     else:
         print('User is not logged in')
-    return JsonResponse('Payment subbmitted..', safe=False)
+
+        print('COOKIES:', request.COOKIES)
+        name = data['form']['name']
+        email = data['form']['email']
+
+        cookieData = cookieCart(request)
+        items = cookieData['items']
+
+        customer, created = Customer.objects.get_or_create(
+            email=email,
+        )
+        customer.name = name
+        customer.save()
+        order = Order.objects.create(
+            customer=customer,
+            complete=False,
+        )
+
+        for item in items:
+            product = Product.objects.get(id=item['product']['id'])
+            orderItem = OrderItem.objects.create(
+                product=product,
+                order=order,
+                quantity=item['quantity']
+            )
+
+    total = float(data['form']['total'])  # JSON은 dict
+    order.transaction_id = transaction_id
+
+    if total == order.get_cart_total:  # 변조를 피하기 위함
+        order.complete = True
+    order.save()
+    # return JsonResponse('Payment subbmitted..', safe=False)
 
     return JsonResponse('Payment complete!', safe=False)

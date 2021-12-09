@@ -145,6 +145,8 @@
             .then((data) => {
                   console.log('Success:', data);
                   alert('Transaction completed');
+                cart = {};
+                document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/" //쿠키삭제
                   window.location.href = "{% url 'store' %}"
 
                 })
